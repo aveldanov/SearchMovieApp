@@ -47,6 +47,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 return
                 
             }
+            //Convert
+            var result: MovieResult?
+            do{
+                result = try JSONDecoder().decode(MovieResult.self, from: data)
+                
+                
+            }catch{
+                print("error")
+                
+            }
+            
+            guard let finalResult = result else{
+                return
+            }
+            
+            //update movie array
+            let movies = finalResult.Search
+            
+            print(movies)
             
         }.resume()
         
@@ -75,10 +94,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 }
 
 
-struct Movie{
+
+struct MovieResult: Codable{
+    public private(set) var Search: [Movie]
+
     
+}
+
+struct Movie: Codable{
+    let Title: String
+    let Year: String
+    let imdbID: String
+    let _Type: String
+    let Poster: String
     
-    
+    private enum CodingKeys: String, CodingKey{
+        case Title, Year, imdbID, _Type = "Type", Poster
+    }
 }
 
 
