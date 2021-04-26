@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 //UI
 // network request
@@ -23,6 +24,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(MovieTableViewCell.nib(), forCellReuseIdentifier: MovieTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
@@ -92,7 +94,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as! MovieTableViewCell
+        cell.configure(with: movies[indexPath.row])
+        
+        return cell
     }
 
     
@@ -100,7 +106,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         tableView.deselectRow(at: indexPath, animated: true)
         // moview details
         
-        
+        let url = "https://www.imdb.com/title/\(movies[indexPath.row].imdbID)/"
+        let vc = SFSafariViewController(url: URL(string: url)!)
+        present(vc, animated: true)
     }
 
 }
