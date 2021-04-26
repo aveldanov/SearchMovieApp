@@ -26,6 +26,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
+        
     }
     
     //Field
@@ -42,11 +43,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             return
         }
         
+        movies.removeAll() // refresh search results
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, error == nil else{
                 return
                 
             }
+            
+            
             //Convert
             var result: MovieResult?
             do{
@@ -63,9 +67,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             }
             
             //update movie array
-            let movies = finalResult.Search
+            let newMovies = finalResult.Search
+            self.movies.append(contentsOf: newMovies)
+            print(self.movies)
             
-            print(movies)
+            // refresh table
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+
+            }
             
         }.resume()
         
