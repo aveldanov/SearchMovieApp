@@ -20,7 +20,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var textField: UITextField!
     var movies = [Movie]()
-    let url = URL(string: "https://www.omdbapi.com/?apikey=b20345e3&s=speed&type=movie")!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -42,7 +42,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         guard let text = textField.text, !text.isEmpty else {
             return
         }
-        
+        // replace SPACE with %20
+        let query = text.replacingOccurrences(of: " ", with: "%20")
+        let url = URL(string: "https://www.omdbapi.com/?apikey=b20345e3&s=\(query)&type=movie")!
         movies.removeAll() // refresh search results
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, error == nil else{
