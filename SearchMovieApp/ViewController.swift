@@ -104,6 +104,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
         // moview details
         
         let url = "https://www.imdb.com/title/\(movies[indexPath.row].imdbID)/"
